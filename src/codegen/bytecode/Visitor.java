@@ -16,16 +16,28 @@ public interface Visitor
   public void visit(Ificmplt s);
 
   public void visit(Ifne s);
+  
+  public void visit(Ifeq s);
 
   public void visit(Iload s);
 
+  public void visit(Iaload s);
+  
   public void visit(Imul s);
 
   public void visit(Ireturn s);
 
   public void visit(Istore s);
 
+  public void visit(Iastore s);
+  
   public void visit(Isub s);
+
+  public void visit(Iadd s);
+  
+  public void visit(Iand s);
+
+  public void visit(Ixor s);
 
   public void visit(Invokevirtual s);
 
@@ -35,8 +47,16 @@ public interface Visitor
 
   public void visit(Print s);
 
-  public void visit(New s);
+  public void visit(Putfield s);
+  
+  public void visit(Getfield s);
 
+  public void visit(New s);
+  
+  public void visit(Newarray s);
+
+  public void visit(Arraylength s);
+  
   // type
   public void visit(codegen.bytecode.type.Class t);
 
