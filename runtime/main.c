@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,3 +25,13 @@ int main (int argc, char **argv)
   // enter Java code...
   Tiger_main ();
 }
+=======
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main (int argc, char **argv)
+{
+  Tiger_main ();
+}
+>>>>>>> Lab3

@@ -21,11 +21,9 @@ public class Tuple
   {
     if (t == null)
       return false;
-
     if (!(t instanceof Tuple))
       return false;
 
     return this.id.equals(((Tuple) t).id);
   }
-
 }

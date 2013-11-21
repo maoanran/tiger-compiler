@@ -12,11 +12,13 @@ class BBS{
     
     int[] number ;
     int size ;
+    boolean a;
 
     // Invoke the Initialization, Sort and Printing
     // Methods
     public int Start(int sz){
 	int aux01 ;
+	//a = !aux01;
 	aux01 = this.Init(sz);
 	aux01 = this.Print();
 	System.out.println(99999);

@@ -17,6 +17,8 @@ public interface Visitor
 
   public void visit(codegen.C.exp.Lt e);
 
+  public void visit(codegen.C.exp.Gt e);
+  
   public void visit(codegen.C.exp.NewIntArray e);
 
   public void visit(codegen.C.exp.NewObject e);
@@ -30,7 +32,7 @@ public interface Visitor
   public void visit(codegen.C.exp.This e);
 
   public void visit(codegen.C.exp.Times e);
-
+  
   // statements
   public void visit(codegen.C.stm.Assign s);
 
@@ -50,7 +52,8 @@ public interface Visitor
   public void visit(codegen.C.type.Int t);
 
   public void visit(codegen.C.type.IntArray t);
-
+  
+  public void visit(codegen.C.type.Id t);
   // dec
   public void visit(codegen.C.dec.Dec d);
 
