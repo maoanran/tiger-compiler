@@ -57,8 +57,6 @@ class Tree{
     boolean has_right ;
     Tree my_null ;
 
-
-
     //Tree new_node ;
     //Tree current_node ;
     //Tree parent_node ;
@@ -182,6 +180,17 @@ class Tree{
 	int key_aux ;
 
 	current_node = this ;
+
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	
 	parent_node = this ;
 	cont = true ;
 	found = false ;

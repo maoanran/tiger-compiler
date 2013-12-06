@@ -59,6 +59,14 @@ public class Tiger {
 			case X86:
 				// similar
 				break;
+			case JavaScript:
+				System.out.println("JavaScript codegen");
+				codegen.JavaScript.TranslateVisitor transJavaScript = new codegen.JavaScript.TranslateVisitor();
+				ast.Fac.prog.accept(transJavaScript);
+				codegen.JavaScript.program.T JavaScriptAst = transJavaScript.program;
+				codegen.JavaScript.PrettyPrintVisitor ppJavaScript = new codegen.JavaScript.PrettyPrintVisitor();
+				JavaScriptAst.accept(ppJavaScript);
+				break;
 			default:
 				break;
 			}
@@ -199,6 +207,13 @@ public class Tiger {
 			break;
 		case X86:
 			// similar
+			break;
+		case JavaScript:
+			codegen.JavaScript.TranslateVisitor transJavaScript = new codegen.JavaScript.TranslateVisitor();
+			theAst.accept(transJavaScript);
+			codegen.JavaScript.program.T JavaScriptAst = transJavaScript.program;
+			codegen.JavaScript.PrettyPrintVisitor ppJavaScript = new codegen.JavaScript.PrettyPrintVisitor();
+			JavaScriptAst.accept(ppJavaScript);
 			break;
 		default:
 			break;

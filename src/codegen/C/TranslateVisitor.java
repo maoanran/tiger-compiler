@@ -17,6 +17,7 @@ public class TranslateVisitor implements ast.Visitor {
 	private codegen.C.mainMethod.T mainMethod;
 	public codegen.C.program.T program;
 	private ast.program.Program p;
+	private int num;
 
 	public TranslateVisitor() {
 		this.table = new ClassTable();
@@ -31,6 +32,7 @@ public class TranslateVisitor implements ast.Visitor {
 		this.methods = new java.util.LinkedList<codegen.C.method.T>();
 		this.mainMethod = null;
 		this.program = null;
+		this.num = 0;
 	}
 
 	// //////////////////////////////////////////////////////
@@ -84,7 +86,8 @@ public class TranslateVisitor implements ast.Visitor {
 
 	@Override
 	public void visit(ast.exp.Id e) {
-		this.exp = new codegen.C.exp.Id(e.id, e.isField);
+		e.type.accept(this);
+		this.exp = new codegen.C.exp.Id(e.id, e.isField, e.isLocal, this.type);
 		return;
 	}
 
@@ -113,17 +116,20 @@ public class TranslateVisitor implements ast.Visitor {
 		this.exp = new codegen.C.exp.Gt(left, right);
 		return;
 	}
-	
+
 	@Override
 	public void visit(ast.exp.NewIntArray e) {
 		e.exp.accept(this);
-		this.exp = new codegen.C.exp.NewIntArray(this.exp);
+		codegen.C.exp.NewIntArray a = new codegen.C.exp.NewIntArray(this.exp);
+		a.name = "alloc_" + this.num++;
+		this.exp = a;
 	}
 
 	@Override
 	public void visit(ast.exp.NewObject e) {
-		this.exp = new codegen.C.exp.NewObject(e.id);
-		return;
+		codegen.C.exp.NewObject a = new codegen.C.exp.NewObject(e.id);
+		a.name = "alloc_" + this.num++;
+		this.exp = a;
 	}
 
 	@Override
@@ -178,7 +184,8 @@ public class TranslateVisitor implements ast.Visitor {
 	@Override
 	public void visit(ast.stm.Assign s) {
 		s.exp.accept(this);
-		this.stm = new codegen.C.stm.Assign(new codegen.C.exp.Id(s.id.id, s.id.isField), this.exp);
+		s.id.type.accept(this);
+		this.stm = new codegen.C.stm.Assign(new codegen.C.exp.Id(s.id.id, s.id.isField, s.id.isLocal, this.type), this.exp);
 		return;
 	}
 
@@ -190,7 +197,8 @@ public class TranslateVisitor implements ast.Visitor {
 		index = this.exp;
 		s.exp.accept(this);
 		exp = this.exp;
-		this.stm = new codegen.C.stm.AssignArray(new codegen.C.exp.Id(s.id.id, s.id.isField), index, exp);
+		s.id.accept(this);
+		this.stm = new codegen.C.stm.AssignArray(new codegen.C.exp.Id(s.id.id, s.id.isField, s.id.isLocal, this.type), index, exp);
 	}
 
 	@Override
@@ -309,13 +317,13 @@ public class TranslateVisitor implements ast.Visitor {
 	@Override
 	public void visit(ast.classs.Class c) {
 		ClassBinding cb = this.table.get(c.id);
-		
+
 		this.classId = c.id;
 
 		this.classes.add(new codegen.C.classs.Class(c.id, cb.fields));
-		
+
 		this.vtables.add(new codegen.C.vtable.Vtable(c.id, cb.methods));
-		
+
 		ast.classs.Class c2 = c;
 
 		while (c2.extendss != null) {
@@ -387,7 +395,7 @@ public class TranslateVisitor implements ast.Visitor {
 				newDecs.add(this.dec);
 			}
 			this.table.initDecs(cc.id, newDecs);
-			
+
 			// all methods
 			java.util.LinkedList<ast.method.T> methods = cc.methods;
 			for (ast.method.T mthd : methods) {

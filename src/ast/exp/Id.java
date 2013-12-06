@@ -4,6 +4,7 @@ public class Id extends T {
 	public String id; // name of the id
 	public ast.type.T type; // type of the id
 	public boolean isField; // whether or not this is a class field
+	public boolean isLocal;
 
 	public Id(String id) {
 		this.id = id;
@@ -16,12 +17,6 @@ public class Id extends T {
 		this.type = null;
 		this.isField = false;
 		this.lineNum = lineNum;
-	}
-
-	public Id(String id, ast.type.T type, boolean isField) {
-		this.id = id;
-		this.type = type;
-		this.isField = isField;
 	}
 
 	@Override
