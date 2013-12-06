@@ -18,6 +18,8 @@ public interface Visitor
   public void visit(ast.exp.Length e);
 
   public void visit(ast.exp.Lt e);
+  
+  public void visit(ast.exp.Gt e);
 
   public void visit(ast.exp.NewIntArray e);
 
@@ -42,6 +44,8 @@ public interface Visitor
 
   public void visit(ast.stm.Block s);
 
+  public void visit(ast.stm.Stms s);
+  
   public void visit(ast.stm.If s);
 
   public void visit(ast.stm.Print s);
@@ -57,6 +61,7 @@ public interface Visitor
 
   public void visit(ast.type.IntArray t);
 
+  public void visit(ast.type.Id t);
   // dec
   public void visit(ast.dec.Dec d);
 

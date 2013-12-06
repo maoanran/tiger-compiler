@@ -200,6 +200,7 @@ class List{
 	aux01 = this ;
 	var_end = end ;
 	var_elem = elem ;
+	
 	while (!var_end){
 	    System.out.println(var_elem.GetAge());
 	    aux01 = aux01.GetNext() ;
@@ -209,6 +210,7 @@ class List{
 
 	return true ;
     }
+    
 }
     
 

@@ -15,6 +15,7 @@ class TV {
 	boolean ntb ;
 	int nti ;
 	MyVisitor v ;
+	int[] a;
 
 	root = new Tree();
 	ntb = root.Init(16);
@@ -55,8 +56,6 @@ class Tree{
     boolean has_left ;
     boolean has_right ;
     Tree my_null ;
-
-
 
     //Tree new_node ;
     //Tree current_node ;
@@ -181,6 +180,17 @@ class Tree{
 	int key_aux ;
 
 	current_node = this ;
+
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	parent_node = new Tree() ;
+	
 	parent_node = this ;
 	cont = true ;
 	found = false ;
