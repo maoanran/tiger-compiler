@@ -93,7 +93,7 @@ public class Parser {
 		switch (current.kind) {
 		case TOKEN_LPAREN:
 			advance();
-			exp = parseExp();
+			exp = new ast.exp.Block(parseExp());
 			eatToken(Kind.TOKEN_RPAREN);
 			return exp;
 		case TOKEN_NUM:
@@ -240,6 +240,7 @@ public class Parser {
 	// -> AndExp
 	private ast.exp.T parseExp() throws Exception {
 		ast.exp.T exp = parseAndExp();
+
 		while (current.kind == Kind.TOKEN_AND) {
 			advance();
 			exp = new ast.exp.And(exp, parseAndExp());
@@ -280,13 +281,10 @@ public class Parser {
 				errorHandler(e);
 			}
 			ifThen = parseStatement(locals);
-			if (current.kind == Kind.TOKEN_ELSE) {
-				advance();
-				if (current.kind == Kind.TOKEN_LBRACE)
-					ifElse = parseStatement(locals);
-				else
-					ifElse = new ast.stm.Stms(new util.Flist<ast.stm.T>().addAll(parseStatement(locals)));
-			}
+
+			eatToken(Kind.TOKEN_ELSE);
+			ifElse = parseStatement(locals);
+
 			return new ast.stm.If(ifCondition, ifThen, ifElse, lineNum);
 
 		case TOKEN_WHILE:

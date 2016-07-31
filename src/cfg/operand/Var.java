@@ -16,4 +16,9 @@ public class Var extends T
   {
     v.visit(this);
   }
+  
+	@Override
+	public String toString() {
+		return this.id;
+	}
 }

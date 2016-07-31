@@ -12,4 +12,10 @@ public class False extends T
     v.visit(this);
     return;
   }
+  
+  
+  @Override
+  public String toString() {
+	return "@False";
+  }
 }

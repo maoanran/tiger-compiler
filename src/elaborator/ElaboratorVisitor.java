@@ -1,5 +1,7 @@
 package elaborator;
 
+import ast.exp.Block;
+
 public class ElaboratorVisitor implements ast.Visitor {
 	public ClassTable classTable; // symbol table for class
 	public MethodTable methodTable; // symbol table for each method
@@ -125,7 +127,7 @@ public class ElaboratorVisitor implements ast.Visitor {
 			// useful in later phase.
 			e.isField = true;
 		} else {
-			if(this.methodTable.localValTable.get(e.id) != null)
+			if (this.methodTable.localValTable.get(e.id) != null)
 				e.isLocal = true;
 		}
 
@@ -133,7 +135,7 @@ public class ElaboratorVisitor implements ast.Visitor {
 			this.type = new ast.type.Id("未知类型@" + e.id);
 			return;
 		}
-		
+
 		if (!methodTable.isInit(e.id)) {
 			error("Error at line : " + e.lineNum + "\t" + "参数" + e.id + "未初始化!");
 		}
@@ -248,6 +250,11 @@ public class ElaboratorVisitor implements ast.Visitor {
 		return;
 	}
 
+	@Override
+	public void visit(Block s) {
+		s.exp.accept(this);
+	}
+
 	// statements
 	@Override
 	public void visit(ast.stm.Assign s) {
@@ -258,23 +265,32 @@ public class ElaboratorVisitor implements ast.Visitor {
 			type = this.classTable.get(this.currentClass, s.id.id);
 			s.id.isField = true;
 		} else {
-			if(this.methodTable.localValTable.get(s.id.id) != null)
+			if (this.methodTable.localValTable.get(s.id.id) != null)
 				s.id.isLocal = true;
 		}
-		
+
 		if (type == null) {
 			error("Error at line : " + s.exp.lineNum + "\t" + "不存在的类型:" + s.id.id);
 			return;
 		}
 
 		this.methodTable.initLocalVal(s.id.id);
+		this.methodTable.useLocalVal(s.id.id);
 
 		s.exp.accept(this);
 		s.type = type;
 		s.id.type = type;
-		// error ! 未考虑extends
-		if (!this.type.toString().equals(type.toString()))
-			error("Error at line : " + s.exp.lineNum + "\t" + "不能执行赋值操作 between " + type.toString() + " and " + this.type.toString());
+
+		String str = this.type.toString();
+		while (!str.equals(type.toString())) {
+			if (this.classTable.get(str).extendss != null)
+				str = this.classTable.get(str).extendss;
+			else {
+				error("Error at line : " + s.exp.lineNum + "\t" + "不能执行赋值操作 between " + type.toString() + " and " + this.type.toString());
+				break;
+			}
+		}
+
 		return;
 	}
 
@@ -282,17 +298,18 @@ public class ElaboratorVisitor implements ast.Visitor {
 	public void visit(ast.stm.AssignArray s) {
 		ast.type.T type = this.methodTable.get(s.id.id);
 		this.methodTable.initLocalVal(s.id.id);
-
+		this.methodTable.useLocalVal(s.id.id);
+		
 		s.id.type = new ast.type.IntArray();
 
 		if (type == null) {
 			type = this.classTable.get(this.currentClass, s.id.id);
 			s.id.isField = true;
 		} else {
-			if(this.methodTable.localValTable.get(s.id.id) != null)
+			if (this.methodTable.localValTable.get(s.id.id) != null)
 				s.id.isLocal = true;
 		}
-		
+
 		if (type == null || type.toString() != "@int[]")
 			error("Error at line : " + s.exp.lineNum + "\t" + "错误的数组类型,数组类型必须为@int[]");
 		s.index.accept(this);
@@ -305,12 +322,6 @@ public class ElaboratorVisitor implements ast.Visitor {
 
 	@Override
 	public void visit(ast.stm.Block s) {
-		for (ast.stm.T stm : s.stms)
-			stm.accept(this);
-	}
-
-	@Override
-	public void visit(ast.stm.Stms s) {
 		for (ast.stm.T stm : s.stms)
 			stm.accept(this);
 	}
@@ -420,17 +431,18 @@ public class ElaboratorVisitor implements ast.Visitor {
 			error("Error at line : " + mt.retExp.lineNum + "\t" + "非法的返回值");
 		else if (!retType.equals(this.type.toString()))
 			error("Error at line : " + mt.retExp.lineNum + "\t" + "期待返回  " + retType + " 但是获得 " + this.type.toString());
-		java.util.Iterator<String> it = methodTable.localValIsUseTable.keySet().iterator();
 
 		// 检测未使用的变量
 		StringBuffer buf = new StringBuffer();
-		for (; it.hasNext();) {
-			String key = it.next();
-			Boolean value = methodTable.localValIsUseTable.get(key);
+		for (ast.dec.T d : m.locals) {
+			ast.dec.Dec dec = (ast.dec.Dec) d;
+			Boolean value = methodTable.localValIsUseTable.get(dec.id);
 			if (!value) {
-				buf.append("warning! unused variable: " + key + " in method: " + m.id + "\n");
+				dec.isUsed = false;
+				buf.append("warning! unused variable: " + dec.id + " in method: " + m.id + "\n");
 			}
 		}
+
 		System.err.print(buf.toString());
 		return;
 	}
@@ -523,4 +535,5 @@ public class ElaboratorVisitor implements ast.Visitor {
 		}
 
 	}
+
 }

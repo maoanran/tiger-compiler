@@ -37,6 +37,8 @@ public interface Visitor
 
   public void visit(ast.exp.True e);
 
+  public void visit(ast.exp.Block s);
+  
   // statements
   public void visit(ast.stm.Assign s);
 
@@ -44,8 +46,6 @@ public interface Visitor
 
   public void visit(ast.stm.Block s);
 
-  public void visit(ast.stm.Stms s);
-  
   public void visit(ast.stm.If s);
 
   public void visit(ast.stm.Print s);

@@ -1,15 +1,22 @@
-class DeadCode { 
+class DeadCode {
 	public static void main(String[] a) {
-        System.out.println(new Doit().doit());
-    }
+		System.out.println(new Doit().doit());
+	}
 }
 
 class Doit {
-    public int doit() {
-        if (true)
-          System.out.println(1);
-        else 
-          System.out.println(0);
-        return 0;
-    }
+	public int doit() {
+		int k;
+		boolean a;
+		
+		k = 0;
+		if (true)
+			System.out.println(1);
+		else
+			System.out.println(k);
+
+		while (false)
+			System.out.println(2);
+		return k;
+	}
 }

@@ -7,6 +7,7 @@ class DeadClass {
 class Junk{
 }
 class Fac extends Junk {
+	int k;
     public int ComputeFac(int num) {
         int num_aux;
         if (num < 1)
@@ -15,4 +16,12 @@ class Fac extends Junk {
             num_aux = num * (this.ComputeFac(num-1));
         return num_aux;
     }
+    
+    public int yes(){
+    	return 1;
+    }
+}
+
+class A{
+	
 }

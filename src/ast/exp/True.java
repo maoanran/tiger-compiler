@@ -12,4 +12,9 @@ public class True extends T
     v.visit(this);
     return;
   }
+  
+  @Override
+  public String toString() {
+	return "@True";
+  }
 }

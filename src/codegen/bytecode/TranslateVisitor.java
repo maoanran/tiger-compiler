@@ -3,6 +3,7 @@ package codegen.bytecode;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
+import ast.exp.Block;
 import util.Label;
 
 // Given a Java ast, translate it into Java bytecode.
@@ -461,14 +462,13 @@ public class TranslateVisitor implements ast.Visitor {
 	}
 
 	@Override
-	public void visit(ast.stm.Stms s) {
-		for (ast.stm.T ss : s.stms)
-			ss.accept(this);
+	public void visit(ast.type.Id t) {
+		System.out.println("id");
 	}
 
 	@Override
-	public void visit(ast.type.Id t) {
-		System.out.println("id");
-
+	public void visit(Block s) {
+		// TODO Auto-generated method stub
+		
 	}
 }

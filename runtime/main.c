@@ -17,15 +17,15 @@ int main(int argc, char **argv) {
 	// and "command-line.c"
 	// Your code here:
 
-	printf("\n%s\n", "如需要设置栈大小，请使用参数@tiger -heapSize <n>@，<n>的单位为KB\n例： ./a.out @tiger -heapSize 1 @");
-	printf("\n%s\n", "如需要输出调试信息，请使用参数@tiger -gcLog @\n例： ./a.out @tiger -gcLog @");
-	printf("\n%s\n\n", "相关参数保存在runtime/control.c文件中，可修改文件手动配置");
+	printf("\n%s\n", "If you want to set the size of heap, please use arguments: @tiger -heapSize <n>@, the unit of <n> is KB\nfor example: ./a.out @tiger -heapSize 1 @");
+	printf("\n%s\n", "If you want to output the log of GC, please use arguments: @tiger -gcLog @\nfor example: ./a.out @tiger -gcLog @");
+	printf("\n%s\n\n", "The related arguments is in runtime/control.c, you can modified it if you want.");
 
 	CommandLine_doarg(argc, argv);
 
 	// initialize the Java heap
 	Tiger_heap_init(Control_heapSize);
-	printf("完成初始化堆，堆大小为：%dbytes\n\n", Control_heapSize);
+	printf("The init of heap is completed , the size of heap is:%dbytes\n\n", Control_heapSize);
 
 	// enter Java code...
 	Tiger_main();
